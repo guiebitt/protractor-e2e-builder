@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'protractor-e2e-builder';
+  title = 'protractor-e2e-builder-sample';
 }

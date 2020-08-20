@@ -12,6 +12,12 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./projects/protractor-e2e-builder/tsconfig.lib.json"
+    },
+    {
+      "path": "./projects/protractor-e2e-builder/tsconfig.spec.json"
     }
 ]
 }

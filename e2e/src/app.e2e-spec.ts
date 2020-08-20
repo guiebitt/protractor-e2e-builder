@@ -1,11 +1,19 @@
-import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
+import { E2E } from './../../projects/protractor-e2e-builder/src/lib/core/e2e-builder';
+import { AppPage } from './app.po';
 
 describe('workspace-project App', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
+  });
+
+  it('should display welcome message (E2E)', async () => {
+    await E2E
+      .builder()
+      .navigateTo('')
+      .run();
   });
 
   it('should display welcome message', () => {

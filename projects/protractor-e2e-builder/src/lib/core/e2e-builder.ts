@@ -1,47 +1,48 @@
-import { browser, protractor, ProtractorExpectedConditions } from 'protractor';
-import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { browser } from 'protractor';
+import { defer } from 'rxjs';
+import { E2EBuilderInterface } from './e2e-builder.interface';
+import { E2ECommand } from './e2e-command';
+import { E2ECommandBuilderInterface } from './e2e-command-builder.interface';
 
-export class E2E {
+/**
+ * End-to-end test scenario builder
+ * This class contains some methods to start the test scenario
+ * @extends E2ECommand Abstract command class
+ * @example
+ * new E2EBuilder().navigateTo('home')
+ */
+export class E2EBuilder
+  extends E2ECommand<E2EBuilder>
+  implements E2EBuilderInterface<E2EBuilder>
+{
 
-  private builder: E2EBuilder;
-
-  private constructor() {
-    this.builder = new E2EBuilder();
+  /**
+   * This method adds the navigate method to specific relative URL
+   * @param relativeUrl Relative URL (after base URL)
+   * @example new E2EBuilder().navigateTo('home');
+   */
+  navigateTo(relativeUrl: string, shouldRedirectTo?: string): E2EBuilder {
+    return this.addCommand(this, defer(
+      () => this.navigateToCmd(relativeUrl, shouldRedirectTo)
+    ));
   }
 
-  public static builder(): E2EBuilder {
-    return new E2E().builder;
-  }
-}
-
-export class E2EBuilder {
-
-  private commands: Observable<void> = of(null);
-  private ec: ProtractorExpectedConditions = protractor.ExpectedConditions;
-
-  public navigateTo(relativeUrl: string): E2EBuilder {
-    return this.addCommand(this.navigateToCmd(relativeUrl));
+  /**
+   * This method adds a new commands group
+   * @param command Any class that implements `E2ECommandBuilderInterface`
+   */
+  and<Command>(command: E2ECommandBuilderInterface<Command>): E2EBuilder {
+    return this.addCommand(this, defer(
+      () => command.run()
+    ));
   }
 
-  public run(): Promise<void> {
-    return this.commands.toPromise();
-  }
-
-  private addCommand(cmd: Promise<void>): E2EBuilder {
-    const command = new Observable<void>(observ => {
-      cmd.finally(() => {
-        observ.next();
-        observ.complete();
-      });
-    });
-    this.commands = this.commands.pipe(switchMap(() => command));
-    return this;
-  }
-
-  private async navigateToCmd(relativeUrl: string): Promise<void> {
+  /**
+   * @ignore
+   */
+  private async navigateToCmd(relativeUrl: string, shouldRedirectTo?: string): Promise<void> {
     const url = `${browser.baseUrl}${relativeUrl}`;
     await browser.get(url);
-    expect(await browser.getCurrentUrl()).toBe(url);
+    expect(await browser.getCurrentUrl()).toBe(shouldRedirectTo ? `${browser.baseUrl}${shouldRedirectTo}` : url);
   }
 }

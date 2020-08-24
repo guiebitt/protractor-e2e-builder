@@ -1,24 +1,28 @@
-# ProtractorE2eBuilder
+# Protractor E2E Builder (Sample)
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.9.
+A easily way to build end-to-end tests with protractor framework to angular applications.
 
-## Code scaffolding
+Um caminho mais simples de construir testes ponta a ponta com o framework Protractor para aplicações Angular.
 
-Run `ng generate component component-name --project protractor-e2e-builder` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project protractor-e2e-builder`.
-> Note: Don't forget to add `--project protractor-e2e-builder` or else it will be added to the default project in your `angular.json` file. 
+## The main goal
 
-## Build
+O principal objetivo da proposta é oferecer uma estrutura de codificação para testes ponta a ponta baseado no padrão de construtor de objetos e, através disso, obter um código legível semelhante ao exemplo:
 
-Run `ng build protractor-e2e-builder` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build protractor-e2e-builder`, go to the dist folder `cd dist/protractor-e2e-builder` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test protractor-e2e-builder` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```typescript
+it('should display welcome message', async () => {
+  E2E
+    .builder()
+    .navigateTo('')
+    .and(
+      E2EComponent
+        .get('welcome');
+        .shouldTextBe('Welcome')
+    )
+    .and(
+      E2EComponent
+        .get('title');
+        .shouldTextBe('protractor-e2e-builder-sample app is running!')
+    )
+    .run();
+});
+```

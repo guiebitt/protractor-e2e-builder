@@ -1,11 +1,6 @@
-import { browser, by, element } from 'protractor';
+import { E2EComponent } from './../../projects/protractor-e2e-builder/src/lib/core/command/basic/e2e-component';
 
 export class AppPage {
-  navigateTo(): Promise<unknown> {
-    return browser.get(browser.baseUrl) as Promise<unknown>;
-  }
-
-  getTitleText(): Promise<string> {
-    return element(by.css('app-root .content span')).getText() as Promise<string>;
-  }
+  welcome = E2EComponent.get('welcome');
+  title = E2EComponent.get('title');
 }
